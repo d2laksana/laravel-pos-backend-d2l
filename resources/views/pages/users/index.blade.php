@@ -64,14 +64,21 @@
                                         </td>
                                         <td>{{ $user->phone }}</td>
                                         <td>
-                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Edit</a>
-                                            <a href="#" class="btn btn-danger"
-                                                onclick="event.preventDefault(); document.getElementById('user-delete').submit()">Delete</a>
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                id="user-delete">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
+                                            {{-- if auth role = admin can execute --}}
+                                            @if (Auth::user()->role == 'admin')
+                                                <a href="{{ route('users.edit', $user->id) }}"
+                                                    class="btn btn-primary">Edit</a>
+                                                <a href="#" class="btn btn-danger"
+                                                    onclick="event.preventDefault(); document.getElementById('user-delete').submit()">Delete</a>
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                    id="user-delete">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            @else
+                                                <a href="#" class="btn btn-primary disabled">Edit</a>
+                                                <a href="#" class="btn btn-danger disabled">Delete</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

@@ -25,9 +25,6 @@
                     <li class='{{ Request::is('users') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ url('users') }}">Data Users</a>
                     </li>
-                    <li class="{{ Request::is('users/create') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.create') }}">Add Users</a>
-                    </li>
                 </ul>
             </li>
             <li class="nav-item dropdown {{ $type_menu === 'products' ? 'active' : '' }}">
@@ -35,9 +32,6 @@
                 <ul class="dropdown-menu">
                     <li class='{{ Request::is('products') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ url('products') }}">Data Products</a>
-                    </li>
-                    <li class="{{ Request::is('products/create') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('products.create') }}">Add Product</a>
                     </li>
                 </ul>
             </li>

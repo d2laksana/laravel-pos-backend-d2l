@@ -20,7 +20,7 @@ class Users extends Controller
             ->orWhere('email', 'like', '%' . $request->search . '%')
             ->orWhere('phone', 'like', '%' . $request->search . '%')
             ->orWhere('role', 'like', '%' . $request->search . '%')
-            ->orderBy('id', 'asc')
+            ->orderBy('role', 'asc')
             ->paginate(10);
 
         // $users = User::all();

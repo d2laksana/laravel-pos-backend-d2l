@@ -46,6 +46,7 @@
                             <table class="table-striped table">
                                 <tr>
                                     <th>Name</th>
+                                    <th>Image</th>
                                     <th>Category</th>
                                     <th>Stock</th>
                                     <th>Price</th>
@@ -55,19 +56,28 @@
                                     {{-- @dd($item) --}}
                                     <tr>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ Str::ucfirst($item->category->name) }}</td>
+                                        <td>
+                                            <img src="{{ asset('assets/images/' . $item->image) }}" alt="image"
+                                                class="img-fluid" width="100">
+                                        </td>
+                                        <td>{{ Str::ucfirst($item->category_name) }}</td>
                                         <td>{{ $item->stock }}</td>
                                         <td>Rp. {{ $item->price }}</td>
                                         <td>
-                                            <a href="{{ route('products.edit', $item->id) }}"
-                                                class="btn btn-primary">Edit</a>
-                                            <a href="#" class="btn btn-danger"
-                                                onclick="event.preventDefault(); document.getElementById('products-delete').submit()">Delete</a>
-                                            <form action="{{ route('products.destroy', $item->id) }}" method="POST"
-                                                id="products-delete">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
+                                            @if (Auth::user()->role == 'admin')
+                                                <a href="{{ route('products.edit', $item->id) }}"
+                                                    class="btn btn-primary">Edit</a>
+                                                <a href="#" class="btn btn-danger"
+                                                    onclick="event.preventDefault(); document.getElementById('products-delete').submit()">Delete</a>
+                                                <form action="{{ route('products.destroy', $item->id) }}" method="POST"
+                                                    id="products-delete">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            @else
+                                                <a href="#" class="btn btn-primary disabled">Edit</a>
+                                                <a href="#" class="btn btn-danger disabled">Delete</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

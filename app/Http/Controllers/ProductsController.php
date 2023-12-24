@@ -5,20 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Http\Requests\StoreProductsRequest;
 use App\Http\Requests\UpdateProductsRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // get all products from database and categori name
-        $products = Products::with('category')->paginate(10);
-        // get category name from category id in products table
-        // $products = Products::with('category')->get();
-        // $products = Products::with('category')->paginate(10);
-
+        // search products by name, category name
+        $products = DB::table('products')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*', 'categories.name as category_name')
+            ->where('products.name', 'like', '%' . $request->search . '%')
+            ->orWhere('categories.name', 'like', '%' . $request->search . '%')
+            ->orderBy('products.name', 'asc')
+            ->paginate(10);
 
         // return to view with products
         return view('pages.product.index', compact('products'), ['type_menu' => 'products']);
@@ -30,7 +34,7 @@ class ProductsController extends Controller
     public function create()
     {
         // return to view
-        return view('pages.product.create');
+        return view('pages.product.create', ['type_menu' => 'products']);
     }
 
     /**
@@ -39,20 +43,24 @@ class ProductsController extends Controller
     public function store(StoreProductsRequest $request)
     {
         // validate request
-        $data = $request->validated(
+        $data = $request->validate(
             [
                 'name' => 'required',
                 'description' => 'required',
-                'price' => 'required',
-                'image' => 'required',
-                'category_id' => 'required',
-                'stock' => 'required',
+                'price' => 'required|numeric|min:1000',
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'category_id' => 'required|exists:categories,id',
+                'stock' => 'required|numeric|min:1',
             ]
         );
-
+        // save image
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('assets/images'), $imageName);
         // store data from request
+        $data['image'] = $imageName;
+        Products::create($data);
         // return to view
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Product Added successfully.');
     }
 
     /**
@@ -84,6 +92,9 @@ class ProductsController extends Controller
      */
     public function destroy(Products $products)
     {
-        //
+        // delete product data
+        $products->delete();
+        // return to view
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }
