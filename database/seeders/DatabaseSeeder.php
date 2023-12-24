@@ -21,12 +21,12 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        User::factory(20)->create();
+        // User::factory(20)->create();
 
-        // User::factory()->create([
-        //     'name' => 'D2L',
-        //     'email' => 'd2laksana.dev@gmail.com',
-        //     'role' => 'admin',
-        // ]);
+        User::factory()->create([
+            'name' => 'D2L',
+            'email' => 'd2laksana.dev@gmail.com',
+            'role' => 'admin',
+        ]);
     }
 }

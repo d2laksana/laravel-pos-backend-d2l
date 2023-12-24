@@ -93,9 +93,11 @@ class Users extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        // delete user 1 data
+        // find user by id
+        $user = User::find($id);
+        // delete user
         $user->delete();
         // return to users page
         return redirect('/users')->with('success', 'User deleted successfully.');

@@ -89,27 +89,16 @@
                             <div class="form-group">
                                 <label class="form-label">Role</label>
                                 <div class="selectgroup w-100">
-                                    @if ($user->role == 'admin')
-                                        <label class="selectgroup-item">
-                                            <input type="radio" name="role" value="admin" class="selectgroup-input"
-                                                checked>
-                                            <span class="selectgroup-button">Admin</span>
-                                        </label>
-                                        <label class="selectgroup-item">
-                                            <input type="radio" name="role" value="user" class="selectgroup-input">
-                                            <span class="selectgroup-button">User</span>
-                                        </label>
-                                    @else
-                                        <label class="selectgroup-item">
-                                            <input type="radio" name="role" value="admin" class="selectgroup-input">
-                                            <span class="selectgroup-button">Admin</span>
-                                        </label>
-                                        <label class="selectgroup-item">
-                                            <input type="radio" name="role" value="user" class="selectgroup-input"
-                                                checked>
-                                            <span class="selectgroup-button">User</span>
-                                        </label>
-                                    @endif
+                                    <label class="selectgroup-item">
+                                        <input type="radio" name="role" value="admin" class="selectgroup-input"
+                                            @if ($user->role == 'admin') checked @endif>
+                                        <span class="selectgroup-button">Admin</span>
+                                    </label>
+                                    <label class="selectgroup-item">
+                                        <input type="radio" name="role" value="staff" class="selectgroup-input"
+                                            @if ($user->role == 'staff') checked @endif>
+                                        <span class="selectgroup-button">Staff</span>
+                                    </label>
                                 </div>
                             </div>
 

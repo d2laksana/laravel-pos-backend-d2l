@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Add Product')
+@section('title', 'Edit Product')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -29,17 +29,20 @@
                 {{-- <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
                 <div class="card">
                     <div class="card-header">
-                        <h4>Add Product</h4>
+                        <h4>Edit Product</h4>
                     </div>
                     <div class="card-body">
                         {{-- form upload file --}}
-                        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('products.update', $products->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            {{-- @dd($products) --}}
                             @csrf
+                            @method('PUT')
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input id="name" type="name"
                                     class="form-control @error('name') is-invalid @enderror" name="name" tabindex="1"
-                                    required autofocus>
+                                    required autofocus value="{{ $products->name }}">
                                 @error('name')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -49,30 +52,49 @@
                             <div class="form-group">
                                 <label class="form-label">Category</label>
                                 <div class="selectgroup w-100">
+                                    {{-- selected category --}}
                                     <label class="selectgroup-item">
                                         <input type="radio" name="category_id" value="2" class="selectgroup-input"
-                                            checked="">
+                                            @if ($products->category_id == '2') checked="" @endif>
                                         <span class="selectgroup-button">Food</span>
                                     </label>
                                     <label class="selectgroup-item">
-                                        <input type="radio" name="category_id" value="3" class="selectgroup-input">
+                                        <input type="radio" name="category_id" value="3" class="selectgroup-input"
+                                            @if ($products->category_id == '3') checked @endif>
                                         <span class="selectgroup-button">Drink</span>
                                     </label>
                                     <label class="selectgroup-item">
-                                        <input type="radio" name="category_id" value="1" class="selectgroup-input">
+                                        <input type="radio" name="category_id" value="1" class="selectgroup-input"
+                                            @if ($products->category_id == '1') checked @endif>
                                         <span class="selectgroup-button">Snack</span>
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>File</label>
-                                <input type="file" name="image" class="form-control">
+                                <div class="d-flex flex-row">
+                                    <div class="col-md-4">
+                                        <img src="{{ asset('assets/images/' . $products->image) }}" alt="image"
+                                            class="img-fluid" width="100" id="preview">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label for="image">Image</label>
+                                        <input id="image" type="file"
+                                            class="form-control @error('image') is-invalid @enderror" name="image"
+                                            tabindex="1" autofocus value="{{ $products->image }}">
+                                        @error('image')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="stock">Stock</label>
                                 <input id="stock" type="number"
                                     class="form-control @error('stock') is-invalid @enderror" name="stock" tabindex="1"
-                                    required autofocus>
+                                    required autofocus value="{{ $products->stock }}">
                                 @error('stock')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -83,7 +105,7 @@
                                 <label for="price">Price</label>
                                 <input id="price" type="number"
                                     class="form-control @error('price') is-invalid @enderror" name="price" tabindex="1"
-                                    required autofocus>
+                                    required autofocus value="{{ $products->price }}">
                                 @error('price')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -93,7 +115,7 @@
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea name="description" id="description" cols="30" rows="10"
-                                    class="form-control @error('description') is-invalid @enderror"></textarea>
+                                    class="form-control @error('description') is-invalid @enderror">{{ $products->description }}</textarea>
                             </div>
 
                     </div>
@@ -121,4 +143,16 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/forms-advanced-forms.js') }}"></script>
+
+    {{-- Preview image --}}
+    <script>
+        image.onchange = evt => {
+            preview = document.getElementById('preview');
+            // preview.style.display = 'block';
+            const [file] = image.files
+            if (file) {
+                preview.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
 @endpush

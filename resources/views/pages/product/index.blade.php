@@ -64,20 +64,22 @@
                                         <td>{{ $item->stock }}</td>
                                         <td>Rp. {{ $item->price }}</td>
                                         <td>
-                                            @if (Auth::user()->role == 'admin')
-                                                <a href="{{ route('products.edit', $item->id) }}"
-                                                    class="btn btn-primary">Edit</a>
-                                                <a href="#" class="btn btn-danger"
-                                                    onclick="event.preventDefault(); document.getElementById('products-delete').submit()">Delete</a>
+                                            <div class="d-flex justify-content-center">
+                                                <a href='{{ route('products.edit', $item->id) }}'
+                                                    class="btn btn-sm btn-info btn-icon">
+                                                    <i class="fas fa-edit"></i>
+                                                    Edit
+                                                </a>
+
                                                 <form action="{{ route('products.destroy', $item->id) }}" method="POST"
-                                                    id="products-delete">
-                                                    @csrf
-                                                    @method('DELETE')
+                                                    class="ml-2">
+                                                    <input type="hidden" name="_method" value="DELETE" />
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                        <i class="fas fa-times"></i> Delete
+                                                    </button>
                                                 </form>
-                                            @else
-                                                <a href="#" class="btn btn-primary disabled">Edit</a>
-                                                <a href="#" class="btn btn-danger disabled">Delete</a>
-                                            @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

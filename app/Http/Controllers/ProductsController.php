@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductsRequest;
 use App\Http\Requests\UpdateProductsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class ProductsController extends Controller
 {
@@ -21,7 +22,7 @@ class ProductsController extends Controller
             ->select('products.*', 'categories.name as category_name')
             ->where('products.name', 'like', '%' . $request->search . '%')
             ->orWhere('categories.name', 'like', '%' . $request->search . '%')
-            ->orderBy('products.name', 'asc')
+            // ->orderBy('products.id', 'asc')
             ->paginate(10);
 
         // return to view with products
@@ -74,26 +75,59 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Products $products)
+    public function edit($id)
     {
-        //
+        // find product by id
+        $products = Products::findOrFail($id);
+        // return to view
+        return view('pages.product.edit', compact('products'), ['type_menu' => 'products']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductsRequest $request, Products $products)
+    public function update(Request $request, $id)
     {
-        //
+        // find product by id
+        $products = Products::findOrFail($id);
+        // validate request
+        $data = $request->validate(
+            [
+                'name' => 'required',
+                'description' => 'required',
+                'price' => 'required|numeric|min:1000',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'category_id' => 'required|exists:categories,id',
+                'stock' => 'required|numeric|min:1',
+            ]
+        );
+        // check if request has image
+        if ($request->has('image')) {
+            // delete old image
+            File::delete(public_path('assets/images/' . $products->image));
+            // save new image
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('assets/images'), $imageName);
+            // store data from request
+            $data['image'] = $imageName;
+        }
+        // update product
+        $products->update($data);
+        // return to view
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Products $products)
+    public function destroy($id)
     {
-        // delete product data
-        $products->delete();
+        // find product by id
+        $product = Products::findOrFail($id);
+        // delete image
+        File::delete(public_path('assets/images/' . $product->image));
+        // delete product
+        $product->delete();
         // return to view
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }

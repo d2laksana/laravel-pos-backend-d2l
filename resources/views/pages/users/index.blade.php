@@ -57,28 +57,29 @@
                                         <td>{{ $user->email }}</td>
                                         <td>
                                             @if ($user->role == 'admin')
-                                                <div class="badge badge-success">{{ $user->role }}</div>
+                                                <div class="badge badge-success">{{ Str::ucfirst($user->role) }}</div>
                                             @else
-                                                <div class="badge badge-primary">{{ $user->role }}</div>
+                                                <div class="badge badge-primary">{{ Str::ucfirst($user->role) }}</div>
                                             @endif
                                         </td>
                                         <td>{{ $user->phone }}</td>
                                         <td>
-                                            {{-- if auth role = admin can execute --}}
-                                            @if (Auth::user()->role == 'admin')
-                                                <a href="{{ route('users.edit', $user->id) }}"
-                                                    class="btn btn-primary">Edit</a>
-                                                <a href="#" class="btn btn-danger"
-                                                    onclick="event.preventDefault(); document.getElementById('user-delete').submit()">Delete</a>
+                                            <div class="d-flex justify-content-center">
+                                                <a href='{{ route('users.edit', $user->id) }}'
+                                                    class="btn btn-sm btn-info btn-icon">
+                                                    <i class="fas fa-edit"></i>
+                                                    Edit
+                                                </a>
+
                                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                    id="user-delete">
-                                                    @csrf
-                                                    @method('DELETE')
+                                                    class="ml-2">
+                                                    <input type="hidden" name="_method" value="DELETE" />
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                        <i class="fas fa-times"></i> Delete
+                                                    </button>
                                                 </form>
-                                            @else
-                                                <a href="#" class="btn btn-primary disabled">Edit</a>
-                                                <a href="#" class="btn btn-danger disabled">Delete</a>
-                                            @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
