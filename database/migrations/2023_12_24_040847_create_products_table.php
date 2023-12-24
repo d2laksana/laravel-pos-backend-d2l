@@ -21,7 +21,7 @@ return new class extends Migration
             // image
             $table->string('image')->nullable();
             // category foreign key from categories table
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             // stock 
             $table->integer('stock')->default(0);
             $table->timestamps();

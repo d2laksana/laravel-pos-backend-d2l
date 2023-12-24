@@ -13,7 +13,15 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        //
+        // get all products from database and categori name
+        $products = Products::with('category')->paginate(10);
+        // get category name from category id in products table
+        // $products = Products::with('category')->get();
+        // $products = Products::with('category')->paginate(10);
+
+
+        // return to view with products
+        return view('pages.product.index', compact('products'), ['type_menu' => 'products']);
     }
 
     /**
@@ -21,7 +29,8 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        //
+        // return to view
+        return view('pages.product.create');
     }
 
     /**
@@ -29,7 +38,21 @@ class ProductsController extends Controller
      */
     public function store(StoreProductsRequest $request)
     {
-        //
+        // validate request
+        $data = $request->validated(
+            [
+                'name' => 'required',
+                'description' => 'required',
+                'price' => 'required',
+                'image' => 'required',
+                'category_id' => 'required',
+                'stock' => 'required',
+            ]
+        );
+
+        // store data from request
+        // return to view
+        return redirect()->route('products.index');
     }
 
     /**

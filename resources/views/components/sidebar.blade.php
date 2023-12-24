@@ -30,6 +30,17 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item dropdown {{ $type_menu === 'products' ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Products</span></a>
+                <ul class="dropdown-menu">
+                    <li class='{{ Request::is('products') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ url('products') }}">Data Products</a>
+                    </li>
+                    <li class="{{ Request::is('products/create') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('products.create') }}">Add Product</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </aside>
 </div>

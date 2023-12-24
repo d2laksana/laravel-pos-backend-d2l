@@ -20,4 +20,5 @@ Route::group(['middleware' => ['auth']], function () {
         return view('pages.dashboard', ['type_menu' => 'dashboard']);
     });
     Route::resource('users', App\Http\Controllers\Users::class);
+    Route::resource('products', App\Http\Controllers\ProductsController::class);
 });
