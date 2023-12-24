@@ -1,11 +1,9 @@
 @if ($message = Session::get('success'))
-    <div class="aler alert-success alert-dismissble show fade">
+    <div class="alert alert-success alert-has-icon">
+        <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
         <div class="alert-body">
-            <button class="close" data-dismiss="alert">
-                <span>&times;</span>
-            </button>
+            <div class="alert-title">Success</div>
             {{ $message }}
         </div>
-
     </div>
 @endif
