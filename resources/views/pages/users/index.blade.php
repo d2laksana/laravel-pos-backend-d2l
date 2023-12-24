@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('title', 'Users')
 
 @push('style')
@@ -23,8 +24,8 @@
             </div>
 
             <div class="section-body">
+                @include('layouts.alert')
                 <h2 class="section-title">Users</h2>
-                @extends('layouts.alert')
 
                 <div class="card">
                     <div class="card-header">
