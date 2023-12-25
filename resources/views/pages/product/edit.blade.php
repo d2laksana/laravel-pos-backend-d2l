@@ -73,7 +73,7 @@
                             <div class="form-group">
                                 <div class="d-flex flex-row">
                                     <div class="col-md-4">
-                                        <img src="{{ asset('assets/images/' . $products->image) }}" alt="image"
+                                        <img src="{{ asset('storage/product/' . $products->image) }}" alt="image"
                                             class="img-fluid" width="100" id="preview">
                                     </div>
                                     <div class="col-md-8">

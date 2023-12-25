@@ -57,7 +57,7 @@
                                     <tr>
                                         <td>{{ $item->name }}</td>
                                         <td>
-                                            <img src="{{ asset('assets/images/' . $item->image) }}" alt="image"
+                                            <img src="{{ asset('storage/product/' . $item->image) }}" alt="image"
                                                 class="img-fluid" width="100">
                                         </td>
                                         <td>{{ Str::ucfirst($item->category_name) }}</td>

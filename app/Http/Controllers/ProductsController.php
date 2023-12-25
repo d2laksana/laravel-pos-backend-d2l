@@ -7,7 +7,7 @@ use App\Http\Requests\StoreProductsRequest;
 use App\Http\Requests\UpdateProductsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -56,7 +56,7 @@ class ProductsController extends Controller
         );
         // save image
         $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('assets/images'), $imageName);
+        $request->image->storeAS('public/product', $imageName);
         // store data from request
         $data['image'] = $imageName;
         Products::create($data);
@@ -77,7 +77,7 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        // find product by id
+        // find product by 
         $products = Products::findOrFail($id);
         // return to view
         return view('pages.product.edit', compact('products'), ['type_menu' => 'products']);
@@ -104,10 +104,10 @@ class ProductsController extends Controller
         // check if request has image
         if ($request->has('image')) {
             // delete old image
-            File::delete(public_path('assets/images/' . $products->image));
+            Storage::delete('public/product/' . $products->image);
             // save new image
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('assets/images'), $imageName);
+            $request->image->storeAS('public/product', $imageName);
             // store data from request
             $data['image'] = $imageName;
         }
@@ -125,7 +125,7 @@ class ProductsController extends Controller
         // find product by id
         $product = Products::findOrFail($id);
         // delete image
-        File::delete(public_path('assets/images/' . $product->image));
+        Storage::delete('public/product/' . $product->image);
         // delete product
         $product->delete();
         // return to view
