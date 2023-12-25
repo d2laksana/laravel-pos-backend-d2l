@@ -62,7 +62,7 @@
                                         </td>
                                         <td>{{ Str::ucfirst($item->category_name) }}</td>
                                         <td>{{ $item->stock }}</td>
-                                        <td>Rp. {{ $item->price }}</td>
+                                        <td>@currency($item->price)</td>
                                         <td>
                                             <div class="d-flex justify-content-center">
                                                 <a href='{{ route('products.edit', $item->id) }}'
